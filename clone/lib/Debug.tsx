@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRoomContext } from '@livekit/components-react';
+import { UseTokenOptions, useRoomContext } from '@livekit/components-react';
 import { setLogLevel, LogLevel } from 'livekit-client';
 
 export const useDebugMode = ({ logLevel }: { logLevel?: LogLevel }) => {

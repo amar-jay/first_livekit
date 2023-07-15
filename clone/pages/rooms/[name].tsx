@@ -1,19 +1,20 @@
+"use client"
 import {
   LiveKitRoom,
   PreJoin,
   LocalUserChoices,
-  useToken,
   VideoConference,
   formatChatMessageLinks,
 } from '@livekit/components-react';
 import { LogLevel, RoomOptions, VideoPresets } from 'livekit-client';
 
 import type { NextPage } from 'next';
+import { Suspense, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { DebugMode } from '../../lib/Debug';
-import { useServerUrl } from '../../lib/client-utils';
+import { useServerUrl, useToken } from '../../lib/client-utils';
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -22,10 +23,10 @@ const Home: NextPage = () => {
   const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>LiveKit Meet</title>
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> */}
 
       <main data-lk-theme="default">
         {roomName && !Array.isArray(roomName) && preJoinChoices ? (
@@ -39,14 +40,13 @@ const Home: NextPage = () => {
         ) : (
           <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
             <PreJoin
-              onError={(err) => console.log('error while setting up prejoin', err)}
+              onError={(err) => console.error('error while setting up prejoin', err)}
               defaults={{
                 username: '',
                 videoEnabled: true,
                 audioEnabled: true,
               }}
               onSubmit={(values) => {
-                console.log('Joining with: ', values);
                 setPreJoinChoices(values);
               }}
             ></PreJoin>
@@ -99,7 +99,8 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
   }, [userChoices, hq]);
 
   return (
-    <>
+    <Suspense fallback={<div>Loading</div>}>
+    {/* <ErrorBoundary fallback={<div>Something went wrong</div>}> */}
       {liveKitUrl && (
         <LiveKitRoom
           token={token}
@@ -108,11 +109,13 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           video={userChoices.videoEnabled}
           audio={userChoices.audioEnabled}
           onDisconnected={onLeave}
+          onError={e => console.error(e)}
         >
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />
         </LiveKitRoom>
       )}
-    </>
+    {/* </ErrorBoundary> */}
+    </Suspense>
   );
 };
