@@ -40,14 +40,13 @@ const Home: NextPage = () => {
         ) : (
           <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
             <PreJoin
-              onError={(err) => console.log('error while setting up prejoin', err)}
+              onError={(err) => console.error('error while setting up prejoin', err)}
               defaults={{
                 username: '',
                 videoEnabled: true,
                 audioEnabled: true,
               }}
               onSubmit={(values) => {
-                console.log('Joining with: ', values);
                 setPreJoinChoices(values);
               }}
             ></PreJoin>
@@ -99,16 +98,6 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     };
   }, [userChoices, hq]);
 
-  useEffect(() => {
-    console.log('room options', roomOptions);
-    console.log('token', token);
-    console.log('server url', liveKitUrl);
-    console.log('user choices', userChoices);
-    console.log('region', region);
-    console.log('hq', hq);
-    console.log("tokenEndpoint", process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT)
-  }, [roomOptions, token, liveKitUrl, userChoices, region, hq]);
-
   return (
     <Suspense fallback={<div>Loading</div>}>
     {/* <ErrorBoundary fallback={<div>Something went wrong</div>}> */}
@@ -120,7 +109,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           video={userChoices.videoEnabled}
           audio={userChoices.audioEnabled}
           onDisconnected={onLeave}
-          onError={e => console.log(e)}
+          onError={e => console.error(e)}
         >
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />

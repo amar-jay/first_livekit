@@ -60,7 +60,6 @@ export default async function handleToken(req: NextApiRequest, res: NextApiRespo
       identity,
       accessToken: token,
     };
-    console.log(result)
 
     res.status(200).json(result);
   } catch (e) {

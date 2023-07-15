@@ -12,7 +12,6 @@ export function useServerUrl(region?: string) {
     fetch(endpoint).then(async (res) => {
       if (res.ok) {
         const body = await res.json();
-        // console.log(body);
         setServerUrl(body.url);
       } else {
         throw Error('Error fetching server url, check server logs');
@@ -39,7 +38,6 @@ export function useToken(
     const tokenFetcher = async () => {
       console.log('fetching token');
       const params = new URLSearchParams({ ...options.userInfo, roomName });
-      console.log(`${tokenEndpoint}?${params.toString()}`);
       const res = await fetch(`${tokenEndpoint}?${params.toString()}`);
       const { accessToken } = await res.json();
       setToken(accessToken);
