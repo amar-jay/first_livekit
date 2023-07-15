@@ -1,3 +1,4 @@
+"use client"
 import {
   LiveKitRoom,
   PreJoin,
@@ -108,6 +109,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           video={userChoices.videoEnabled}
           audio={userChoices.audioEnabled}
           onDisconnected={onLeave}
+          onError={e => console.log(e)}
         >
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />

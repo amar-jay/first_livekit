@@ -10,7 +10,7 @@ export function useServerUrl(region?: string) {
     fetch(endpoint).then(async (res) => {
       if (res.ok) {
         const body = await res.json();
-        console.log(body);
+        // console.log(body);
         setServerUrl(body.url);
       } else {
         throw Error('Error fetching server url, check server logs');
