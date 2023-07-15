@@ -17,11 +17,11 @@ export function getLiveKitURL(region?: string | string[]): string {
   return url;
 }
 
-function checkKeys() {
-  if (typeof process.env.LIVEKIT_API_KEY === 'undefined') {
-    throw new Error('LIVEKIT_API_KEY is not defined');
+export function checkKeys() {
+  if (typeof process.env.LK_API_KEY === 'undefined') {
+    throw new Error('LK_API_KEY is not defined');
   }
-  if (typeof process.env.LIVEKIT_API_SECRET === 'undefined') {
-    throw new Error('LIVEKIT_API_SECRET is not defined');
+  if (typeof process.env.LK_SECRET === 'undefined') {
+    throw new Error('LK_SECRET is not defined');
   }
 }

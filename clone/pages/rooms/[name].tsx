@@ -3,18 +3,18 @@ import {
   LiveKitRoom,
   PreJoin,
   LocalUserChoices,
-  useToken,
   VideoConference,
   formatChatMessageLinks,
 } from '@livekit/components-react';
 import { LogLevel, RoomOptions, VideoPresets } from 'livekit-client';
 
 import type { NextPage } from 'next';
+import { Suspense, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { DebugMode } from '../../lib/Debug';
-import { useServerUrl } from '../../lib/client-utils';
+import { useServerUrl, useToken } from '../../lib/client-utils';
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -23,10 +23,10 @@ const Home: NextPage = () => {
   const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>LiveKit Meet</title>
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> */}
 
       <main data-lk-theme="default">
         {roomName && !Array.isArray(roomName) && preJoinChoices ? (
@@ -99,8 +99,19 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     };
   }, [userChoices, hq]);
 
+  useEffect(() => {
+    console.log('room options', roomOptions);
+    console.log('token', token);
+    console.log('server url', liveKitUrl);
+    console.log('user choices', userChoices);
+    console.log('region', region);
+    console.log('hq', hq);
+    console.log("tokenEndpoint", process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT)
+  }, [roomOptions, token, liveKitUrl, userChoices, region, hq]);
+
   return (
-    <>
+    <Suspense fallback={<div>Loading</div>}>
+    {/* <ErrorBoundary fallback={<div>Something went wrong</div>}> */}
       {liveKitUrl && (
         <LiveKitRoom
           token={token}
@@ -115,6 +126,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           <DebugMode logLevel={LogLevel.info} />
         </LiveKitRoom>
       )}
-    </>
+    {/* </ErrorBoundary> */}
+    </Suspense>
   );
 };
